@@ -6,20 +6,35 @@ const User = require( "./models/userSchema")
 app.use(express.json()) ;
 
 app.post ("/signup" , async (req, res) =>{
-    //const userData  = { firstName : "dhoni" , lastName:'ms' , email:"dhoni@gmail.com", password:"hello"}
+     
     // creating new isntance of user model
-    const user  = new User( req.body)
+   
     try{
+        const user  = new User( req.body)
         await user.save()
         res.send ("User added Successfully")
     }
     catch (err) {
         res.status(400).send("Error Saving while User data")
     }
-
-    // console.log(req.body)
-    // res.send("USer added Successfully!!")
+ 
   
+})
+
+app.get("/user" , async(req, res) =>{
+    const emailId = req.body.email
+    console.log(emailId )
+    try{
+        // querrying Model  
+        const user = await User.find({ email : emailId })
+        if ( user.length == 0){
+            res.status(404).send("User not found")
+        }
+        res.send (user )
+    }
+    catch (err) {
+        res.status(400).send("Something went wrong")
+    }
 })
 
 connectDB().then ( () =>{
