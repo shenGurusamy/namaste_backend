@@ -28,7 +28,7 @@ app.use (  (   req, res, next) => {
 app.use ( ( err, req, res, next) => {
     const status  = err.statusCode  || 500 
     const mess = err.message || " something went wrong"
-    res.status( status).send( mess )
+    res.status( status).send(mess)
 })
 
  
