@@ -3,6 +3,8 @@ const connectDB  = require("./config/DB")
 const app = express();
 const User = require( "./models/userSchema")
 
+app.use(express.json()) ;
+
 app.post ("/signup" , async (req, res) =>{
     const userData  = { firstName : "dhoni" , lastName:'ms' , email:"dhoni@gmail.com", password:"hello"}
     // creating new isntance of user model
