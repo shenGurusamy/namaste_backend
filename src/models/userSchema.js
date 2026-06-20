@@ -26,6 +26,8 @@ const mongoose = require("mongoose") ;
     age :{
         type:Number
     },
+ } , { 
+    timestamps : true
  })
 
  //Mongoose Model should start in Upper case letter
