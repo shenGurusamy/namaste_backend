@@ -16,7 +16,12 @@ const mongoose = require("mongoose") ;
         type:String
     },
     gender :{
-        type:String
+        type:String,
+        validate(value) {
+            if ( !["male", "female" , "others"].includes(value)){
+                throw new Error("Gender value is invalid")
+            }
+        }
     },
     age :{
         type:Number
