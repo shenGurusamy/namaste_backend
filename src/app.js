@@ -42,7 +42,7 @@ app.get("/user" , async(req, res) =>{
     console.log(emailId )
     try{
         // querrying Model  
-        const user = await User.find({ email : emailId })
+        const user = await User.findOne( )
         if ( user.length == 0){
             res.status(404).send("User not found")
         }
@@ -50,6 +50,19 @@ app.get("/user" , async(req, res) =>{
     }
     catch (err) {
         res.status(400).send("Something went wrong")
+    }
+})
+
+app.delete ( "/user" , async (req, res) => {
+    
+    try{
+        const email = req.body.email
+
+        await User.findOneAndDelete ( { email })
+        res.send( "Deleted Successfully")
+    }
+    catch (err) {
+
     }
 })
 
