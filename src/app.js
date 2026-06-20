@@ -6,9 +6,9 @@ const User = require( "./models/userSchema")
 app.use(express.json()) ;
 
 app.post ("/signup" , async (req, res) =>{
-    const userData  = { firstName : "dhoni" , lastName:'ms' , email:"dhoni@gmail.com", password:"hello"}
+    //const userData  = { firstName : "dhoni" , lastName:'ms' , email:"dhoni@gmail.com", password:"hello"}
     // creating new isntance of user model
-    const user  = new User( userData)
+    const user  = new User( req.body)
     try{
         await user.save()
         res.send ("User added Successfully")
@@ -16,6 +16,9 @@ app.post ("/signup" , async (req, res) =>{
     catch (err) {
         res.status(400).send("Error Saving while User data")
     }
+
+    // console.log(req.body)
+    // res.send("USer added Successfully!!")
   
 })
 
