@@ -7,9 +7,10 @@ app.use(express.json()) ;
 
 app.post ("/signup" , async (req, res) =>{
      
-    // creating new isntance of user model
+   
    
     try{
+         // creating new isntance of user model
         const user  = new User( req.body)
         await user.save()
         res.send ("User added Successfully")
@@ -19,6 +20,21 @@ app.post ("/signup" , async (req, res) =>{
     }
  
   
+})
+
+app.get("/feed" , async (req,res) =>{
+    try{
+        const users = await User.find({})
+        if ( users.length == 0) {
+            res.status(404).send("No user Found")
+        }
+        else {
+            res.send ( users )
+        }
+    }
+    catch (err) {
+        res.status(404).send("No user Found")
+    }
 })
 
 app.get("/user" , async(req, res) =>{
