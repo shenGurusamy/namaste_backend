@@ -32,6 +32,17 @@ const mongoose = require("mongoose") ;
         type:Number,
         min:18
     },
+    about:{
+        type:String,
+        default: " ABout your"
+    },
+    photoUrl : {
+        type: String,
+        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTe1PgY5lkq6ejgE-B1vF-9Gjcm_ZIPWtKL9NrRBMpdtg&s=10"
+    },
+    skills :{
+        type : [String]
+    }
  } , { 
     timestamps : true
  })

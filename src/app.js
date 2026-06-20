@@ -54,6 +54,8 @@ app.get("/user" , async(req, res) =>{
 })
 
 app.delete ( "/user" , async (req, res) => {
+
+   
     
     try{
         const email = req.body.email
@@ -63,6 +65,32 @@ app.delete ( "/user" , async (req, res) => {
     }
     catch (err) {
 
+    }
+})
+
+app.patch( "/user/:user_id", async ( req, res) => {
+    try{
+        const allowedUpdates = ["age" , "about" , "gender" , "photoUrl" , "skills"]
+
+        const isupdatesAllowed = Object.keys(req.body).every( s => allowedUpdates.includes(s))
+    
+        if ( !isupdatesAllowed) {
+            throw new Error({msg:"Not Allowed "})
+        }
+        const user_id = req.params?.user_id ;
+        const data = req.body
+        console.log( data)
+
+        if ( data?.skills.length > 10 ){
+            throw new Error ( {msg:"skills should not be more than 10 "})
+        }
+
+        await User.findOneAndUpdate( {_id: user_id} , data)
+        res.send("User updated successfully")
+    }
+    catch (err) {
+        console.log( err)
+        res.status(400).send(err.msg || "Update Not Allowed ")
     }
 })
 
