@@ -3,11 +3,14 @@ const connectDB = require("./config/DB");
 const authRouter = require( "./routes/auth")
 const profileRouter = require( "./routes/profile")
 const requestRouter = require("./routes/connectionRequest")
+const userRouter = require("./routes/user");
+const cookieParser = require("cookie-parser");
+
 
 const User = require("./models/userSchema");
 
 //const bcrypt = require("bcrypt");
-const cookieParser = require("cookie-parser");
+
 //const jwt = require("jsonwebtoken");
  
 
@@ -19,6 +22,7 @@ app.use(cookieParser());
 app.use( "/" , authRouter)
 app.use( "/" , profileRouter)
 app.use("/" , requestRouter) 
+app.use("/" , userRouter)
 
 
 app.get("/feed", async (req, res) => {
