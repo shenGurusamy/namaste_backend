@@ -47,7 +47,7 @@ app.post("/login" , async ( req, res) => {
             throw new Error (" Invalid Credentials")
         }
         
-        const compare = await bcrypt.compare( password , user.password)
+        const compare = user.comparePassword( password )
         console.log ( user.password , password , compare)
         if ( !compare ){
             throw new Error (" Invalid Credentials")
@@ -55,7 +55,8 @@ app.post("/login" , async ( req, res) => {
         else {
             console.log( compare )
            
-            const token = jwt.sign({ _id: user._id }, 'shhhhh' , { expiresIn: '1d'}); 
+            //const token = jwt.sign({ _id: user._id }, 'shhhhh' , { expiresIn: '1d'}); 
+            const token = await user.getJWT()
             res.cookie( "token" , token)
             res.send ( "Login Successfull" )
         }

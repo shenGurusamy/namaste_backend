@@ -1,5 +1,7 @@
 const mongoose = require("mongoose") ;
 var validator = require('validator');
+const bcrypt = require("bcrypt")
+const  jwt = require('jsonwebtoken');
 
  const userSchema = new mongoose.Schema({
     firstName :{
@@ -53,6 +55,20 @@ var validator = require('validator');
  } , { 
     timestamps : true
  })
+
+ userSchema.methods.getJWT = async function ( ) {
+    const user = this ; 
+    const token = await jwt.sign({ _id: user._id }, 'shhhhh' , { expiresIn: '1d'}); 
+    console.log(token)
+    return token
+ }
+ userSchema.methods.comparePassword = async function (passwordInput) {
+    const user = this ;
+    const passwordhash = user.password 
+    const isPasswordValid = await bcrypt.compare( passwordInput, passwordhash )
+    return isPasswordValid
+    
+ }
 
  //Mongoose Model should start in Upper case letter
  //const User = mongoose.model( 'User' , userSchema)
