@@ -1,18 +1,24 @@
-POST/signup
-POST/login
-POST/logout
+Profile Router
 
-PATCH/Profile/password,
-PATCH/Profile/edit,
-get/Profile
+    - POST /signup
+    - POST /login
+    - POST /logout
 
-post/req/send/interested/:userId
-post/req/send/ignored/:userId
+Profile Router
 
-post/req/review/accepted/:reqID
-post/req/review/rejected/:reqID
+    - PATCH /Profile/password,
+    - PATCH /Profile/edit,
+    - GET /Profile
 
-get/allconnections
-get/req/received
+Connection Router
 
-get/feed
+    - POST /req/send/interested/:userId
+    - POST /req/send/ignored/:userId
+    - POST /req/review/accepted/:reqID
+    - POST /req/review/rejected/:reqID
+
+user Router
+
+    - GET /user/allconnections
+    - GET /user/req/received
+    - GET /user/feed
