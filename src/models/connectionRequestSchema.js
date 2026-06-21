@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const schema = new mongoose.Schema({
     fromUserId:{
         type:mongoose.Schema.Types.ObjectId,
-        required : true
+        required : true,
+        
     },
     toUserId:{
         type:mongoose.Schema.Types.ObjectId ,
@@ -19,6 +20,7 @@ const schema = new mongoose.Schema({
     },
     })
 
+    schema.index ( { fromUserId:1 , toUserId:1})
     const Connection = new mongoose.model( "Connection" , schema)
 
     module.exports = Connection; 

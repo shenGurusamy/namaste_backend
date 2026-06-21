@@ -7,6 +7,7 @@ const  jwt = require('jsonwebtoken');
     firstName :{
         type:String,
         required: true,
+        index: true,
         minLength : 3,
         maxLength : 50
     },
