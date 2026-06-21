@@ -30,12 +30,16 @@ const  jwt = require('jsonwebtoken');
     },
     gender :{
         type:String,
-        
-        validate(value) {
-            if ( !["male", "female" , "others"].includes(value)){
-                throw new Error("Gender value is invalid")
-            }
+        enum :{
+            values :["male", "female","others"],
+            message : `{values} is not supported`
         }
+        
+        // validate(value) {
+        //     if ( !["male", "female" , "others"].includes(value)){
+        //         throw new Error("Gender value is invalid")
+        //     }
+        // }
     },
     age :{
         type:Number,
