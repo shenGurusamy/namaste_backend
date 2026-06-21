@@ -17,7 +17,7 @@ Connection Router
     - POST /req/review/accepted/:reqID
     - POST /req/review/rejected/:reqID
 
-user Router
+User Router
 
     - GET /user/allconnections
     - GET /user/req/received
