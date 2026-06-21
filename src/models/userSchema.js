@@ -9,7 +9,8 @@ var validator = require('validator');
         maxLength : 50
     },
     lastName :{
-        type:String
+        type:String,
+        required: true,
     },
     email :{
         type:String,
@@ -27,7 +28,7 @@ var validator = require('validator');
     },
     gender :{
         type:String,
-        required:true,
+        
         validate(value) {
             if ( !["male", "female" , "others"].includes(value)){
                 throw new Error("Gender value is invalid")

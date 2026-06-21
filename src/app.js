@@ -1,17 +1,26 @@
 const express = require("express");
 const connectDB  = require("./config/DB")
 const app = express();
-const User = require( "./models/userSchema")
+const User = require( "./models/userSchema");
+const { validations } = require("./utils/validation");
+const bcrypt= require("bcrypt")
 
 app.use(express.json()) ;
 
-app.post ("/signup" , async (req, res) =>{
-     
-   
-   
+app.post ("/signup" , async (req, res) =>{   
     try{
          // creating new isntance of user model
-        const user  = new User( req.body)
+         validations(req)
+         const { firstName , lastName, email , password} = req.body;
+         const passwordhash = await bcrypt.hash ( password,  10)
+         console.log(passwordhash)
+         const user  = new User( {
+            firstName,
+            lastName,
+            email,
+            password : passwordhash
+        })
+        
         await user.save()
         res.send ("User added Successfully")
     }
@@ -20,6 +29,16 @@ app.post ("/signup" , async (req, res) =>{
     }
  
   
+})
+
+app.post("/login" , async ( req, res) => {
+    try{
+        const {  email , password} = req.body
+
+    }
+    catch (err) {
+
+    }
 })
 
 app.get("/feed" , async (req,res) =>{
@@ -75,14 +94,14 @@ app.patch( "/user/:user_id", async ( req, res) => {
         const isupdatesAllowed = Object.keys(req.body).every( s => allowedUpdates.includes(s))
     
         if ( !isupdatesAllowed) {
-            throw new Error({msg:"Not Allowed "})
+            throw new Error("Not Allowed ")
         }
         const user_id = req.params?.user_id ;
         const data = req.body
         console.log( data)
 
         if ( data?.skills.length > 10 ){
-            throw new Error ( {msg:"skills should not be more than 10 "})
+            throw new Error ( "skills should not be more than 10 ")
         }
 
         await User.findOneAndUpdate( {_id: user_id} , data)
@@ -90,7 +109,7 @@ app.patch( "/user/:user_id", async ( req, res) => {
     }
     catch (err) {
         console.log( err)
-        res.status(400).send(err.msg || "Update Not Allowed ")
+        res.status(400).send(err.message || "Update Not Allowed ")
     }
 })
 
