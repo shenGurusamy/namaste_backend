@@ -1,12 +1,17 @@
 const express = require("express");
 const connectDB  = require("./config/DB")
-const app = express();
+
 const User = require( "./models/userSchema");
 const { validations } = require("./utils/validation");
-const bcrypt= require("bcrypt")
+const bcrypt= require("bcrypt") ;
+const cookieParser = require('cookie-parser')
+const  jwt = require('jsonwebtoken');
+
+const app = express();
 
 app.use(express.json()) ;
-
+app.use(cookieParser()) ;
+ 
 app.post ("/signup" , async (req, res) =>{   
     try{
          // creating new isntance of user model
@@ -34,10 +39,29 @@ app.post ("/signup" , async (req, res) =>{
 app.post("/login" , async ( req, res) => {
     try{
         const {  email , password} = req.body
-
+        const user  = await User.findOne({ email })
+        console.log( "USer data ",user)
+        if ( ! user) {
+            console.log( " indeide !user")
+            throw new Error (" Invalid Credentials")
+        }
+        
+        const compare = await bcrypt.compare( password , user.password)
+        console.log ( user.password , password , compare)
+        if ( !compare ){
+            throw new Error (" Invalid Credentials")
+        }
+        else {
+            console.log( compare )
+           
+            const token = jwt.sign({ _id: user._id }, 'shhhhh'); 
+            res.cookie( "token" , token)
+            res.send ( "Login Successfull" )
+        }
+        
     }
     catch (err) {
-
+        res.status(404).send(err.message) ;
     }
 })
 
@@ -83,9 +107,31 @@ app.delete ( "/user" , async (req, res) => {
         res.send( "Deleted Successfully")
     }
     catch (err) {
-
+        res.status(400).send("Something went wrong")
     }
 })
+
+ app.get("/profile" , async(req, res ) =>{
+
+    try{
+        const cookies= req.cookies ;
+        const { token } = cookies
+        console.log(cookies)
+        const decoded = jwt.verify ( token, "shhhhh")
+        console.log(decoded._id)
+        const user = await User.findById(decoded._id)
+        if (!user) {
+            throw new Error ( "Please login")
+        }else{
+            res.send( user )
+        }
+       
+    }
+    catch (err) {
+        res.status(400).send("Something went wrong")
+    }
+   
+ })
 
 app.patch( "/user/:user_id", async ( req, res) => {
     try{
