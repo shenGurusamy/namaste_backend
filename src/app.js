@@ -6,6 +6,7 @@ const { validations } = require("./utils/validation");
 const bcrypt= require("bcrypt") ;
 const cookieParser = require('cookie-parser')
 const  jwt = require('jsonwebtoken');
+const { userAuth } = require("./middlewares/auth");
 
 const app = express();
 
@@ -54,7 +55,7 @@ app.post("/login" , async ( req, res) => {
         else {
             console.log( compare )
            
-            const token = jwt.sign({ _id: user._id }, 'shhhhh'); 
+            const token = jwt.sign({ _id: user._id }, 'shhhhh' , { expiresIn: '1d'}); 
             res.cookie( "token" , token)
             res.send ( "Login Successfull" )
         }
@@ -111,26 +112,26 @@ app.delete ( "/user" , async (req, res) => {
     }
 })
 
- app.get("/profile" , async(req, res ) =>{
+ app.get("/profile" , userAuth , async(req, res ) =>{
 
     try{
-        const cookies= req.cookies ;
-        const { token } = cookies
-        console.log(cookies)
-        const decoded = jwt.verify ( token, "shhhhh")
-        console.log(decoded._id)
-        const user = await User.findById(decoded._id)
-        if (!user) {
-            throw new Error ( "Please login")
-        }else{
-            res.send( user )
-        }
-       
+        res.send ( req.user )
     }
     catch (err) {
         res.status(400).send("Something went wrong")
     }
    
+ })
+
+ app.post("/sendConnectionRequest" , userAuth , async( req , res) => {
+    try{
+        if ( !req.user ) throw new Error ("Please login")
+        res.send ( `${req.user.firstName} sent a Connection Request` )
+       
+    }
+    catch (err) {
+        res.status(400).send("Something went wrong")
+    }
  })
 
 app.patch( "/user/:user_id", async ( req, res) => {
