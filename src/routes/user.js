@@ -18,8 +18,15 @@ userRouter.get( "/user/connections", userAuth , async (req, res) =>{
                 }
             ]
             
-        }).populate( "fromUserId"  , USER_SAFE_DATA)
-        const data = connectionList.map( row => row.fromUserId)
+        })
+        .populate( "fromUserId"  , USER_SAFE_DATA)
+        .populate("toUserId", USER_SAFE_DATA);
+        const data = connectionList.map( row => {
+            if  ( row.fromUserId.equals(loggedinUser._id)){
+                return row.toUserId
+            }
+            return row.fromUserId
+        })
         if ( data.length) {
             res.send(data)
         }

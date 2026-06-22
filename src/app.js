@@ -6,13 +6,9 @@ const requestRouter = require("./routes/connectionRequest")
 const userRouter = require("./routes/user");
 const cookieParser = require("cookie-parser");
 
+require("./utils/cronjob")
 
 const User = require("./models/userSchema");
-
-//const bcrypt = require("bcrypt");
-
-//const jwt = require("jsonwebtoken");
- 
 
 const app = express();
 
